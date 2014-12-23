@@ -1,5 +1,5 @@
 postgres-pq
-=====================================
+===========
   
 This directory contains the source code distribution of a version of PostgreSQL
 database management system with parallel query processing.
