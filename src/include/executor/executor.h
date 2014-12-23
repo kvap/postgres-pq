@@ -137,6 +137,7 @@ extern JunkFilter *ExecInitJunkFilterConversion(List *targetList,
 							 TupleTableSlot *slot);
 extern AttrNumber ExecFindJunkAttribute(JunkFilter *junkfilter,
 					  const char *attrName);
+extern AttrNumber ExecFindJunkAttributeInTlist(List *targetlist, const char *attrName);
 extern Datum ExecGetJunkAttribute(TupleTableSlot *slot, AttrNumber attno,
 					 bool *isNull);
 extern TupleTableSlot *ExecFilterJunk(JunkFilter *junkfilter,

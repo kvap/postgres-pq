@@ -107,6 +107,10 @@
 #include "executor/nodeValuesscan.h"
 #include "executor/nodeWindowAgg.h"
 #include "executor/nodeWorktablescan.h"
+#include "executor/par_nodeSplit.h"
+#include "executor/par_nodeMerge.h"
+#include "executor/par_nodeScatter.h"
+#include "executor/par_nodeGather.h"
 #include "miscadmin.h"
 
 
@@ -285,7 +289,18 @@ ExecInitNode(Plan *node, EState *estate, int eflags)
 			result = (PlanState *) ExecInitLimit((Limit *) node,
 												 estate, eflags);
 			break;
-
+		case T_Split:
+			result = (PlanState *) ExecInitSplit((Split *) node, estate, eflags);
+			break;
+		case T_Merge:
+			result = (PlanState *) ExecInitMerge((Merge *) node, estate, eflags);
+			break;
+		case T_Scatter:
+			result = (PlanState *) ExecInitScatter((Scatter *) node, estate, eflags);
+			break;
+		case T_Gather:
+			result = (PlanState *) ExecInitGather((Gather *) node, estate, eflags);
+			break;
 		default:
 			elog(ERROR, "unrecognized node type: %d", (int) nodeTag(node));
 			result = NULL;		/* keep compiler quiet */
@@ -449,6 +464,18 @@ ExecProcNode(PlanState *node)
 
 		case T_LimitState:
 			result = ExecLimit((LimitState *) node);
+			break;
+		case T_SplitState:
+			result = ExecSplit((SplitState *) node);
+			break;
+		case T_MergeState:
+			result = ExecMerge((MergeState *) node);
+			break;
+		case T_ScatterState:
+			result = ExecScatter((ScatterState *) node);
+			break;
+		case T_GatherState:
+			result = ExecGather((GatherState *) node);
 			break;
 
 		default:
@@ -626,6 +653,14 @@ ExecCountSlotsNode(Plan *node)
 
 		case T_Limit:
 			return ExecCountSlotsLimit((Limit *) node);
+		case T_Split:
+			return ExecCountSlotsSplit((Split *) node);
+		case T_Merge:
+			return ExecCountSlotsMerge((Merge *) node);
+		case T_Scatter:
+			return ExecCountSlotsScatter((Scatter *) node);
+		case T_Gather:
+			return ExecCountSlotsGather((Gather *) node);
 
 		default:
 			elog(ERROR, "unrecognized node type: %d", (int) nodeTag(node));
@@ -781,6 +816,18 @@ ExecEndNode(PlanState *node)
 
 		case T_LimitState:
 			ExecEndLimit((LimitState *) node);
+			break;
+		case T_SplitState:
+			ExecEndSplit((SplitState *) node);
+			break;
+		case T_MergeState:
+			ExecEndMerge((MergeState *) node);
+			break;
+		case T_ScatterState:
+			ExecEndScatter((ScatterState *) node);
+			break;
+		case T_GatherState:
+			ExecEndGather((GatherState *) node);
 			break;
 
 		default:

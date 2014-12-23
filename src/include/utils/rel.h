@@ -235,6 +235,7 @@ typedef struct StdRdOptions
 	int32		vl_len_;		/* varlena header (do not touch directly!) */
 	int			fillfactor;		/* page fill factor in percent (0..100) */
 	AutoVacOpts autovacuum;		/* autovacuum-related options */
+	char *fragattr;
 } StdRdOptions;
 
 #define HEAP_MIN_FILLFACTOR			10

@@ -135,6 +135,31 @@ typedef ItemPointerData *ItemPointer;
 	(pointer)->ip_posid = InvalidOffsetNumber \
 )
 
+/*
+ * ItemPointerSetDeleteMe
+ *		Sets a disk item pointer to represent the "DELETE ME" case.
+ */
+#define ItemPointerSetDeleteMe(pointer) \
+( \
+	ItemPointerSetBlockNumber((pointer), BlockNumberSetDeleteMe(ItemPointerGetBlockNumber((pointer)))) \
+)
+/*
+ * ItemPointerUnsetDeleteMe
+ *		Unsets a disk item pointer to represent the usual case.
+ */
+#define ItemPointerUnsetDeleteMe(pointer) \
+( \
+	ItemPointerSetBlockNumber((pointer), BlockNumberUnsetDeleteMe(ItemPointerGetBlockNumber((pointer)))) \
+)
+/*
+ * ItemPointerIsDeleteMe
+ *		Checks if a disk item pointer represents the "DELETE ME" case.
+ */
+#define ItemPointerIsDeleteMe(pointer) \
+( \
+	BlockNumberIsDeleteMe(ItemPointerGetBlockNumber((pointer))) \
+)
+
 /* ----------------
  *		externs
  * ----------------

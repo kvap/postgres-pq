@@ -14,9 +14,14 @@ subdir = src/backend
 top_builddir = ../..
 include $(top_builddir)/src/Makefile.global
 
+#par_inis_includedir = "$(top_builddir)/src/include/par_inis"
+
+#override CPPFLAGS := -I$(par_inis_includedir) $(CPPFLAGS)
+
 SUBDIRS = access bootstrap catalog parser commands executor foreign lib libpq \
-	main nodes optimizer port postmaster regex rewrite \
-	storage tcop tsearch utils $(top_builddir)/src/timezone
+	main nodes optimizer par_parallelizer port postmaster \
+	regex rewrite storage tcop tsearch utils \
+	$(top_builddir)/src/timezone
 
 include $(srcdir)/common.mk
 
@@ -33,6 +38,8 @@ endif
 endif
 
 OBJS = $(SUBDIROBJS) $(LOCALOBJS) $(top_builddir)/src/port/libpgport_srv.a
+
+LIBS += -lrt -lpthread
 
 # We put libpgport into OBJS, so remove it from LIBS; also add libldap
 LIBS := $(filter-out -lpgport, $(LIBS)) $(LDAP_LIBS_BE)

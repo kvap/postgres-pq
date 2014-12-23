@@ -3729,3 +3729,5 @@ is_projection_capable_plan(Plan *plan)
 	}
 	return true;
 }
+
+#include "par_createplan.c"

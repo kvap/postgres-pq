@@ -153,3 +153,7 @@ PQresultSetInstanceData   150
 PQfireResultCreateEvents  151
 PQconninfoParse           152
 PQinitOpenSSL             153
+par_PQconnectdb           154
+par_PQfinish              155
+par_PQstatus              156
+par_PQexec                157

@@ -202,6 +202,37 @@ ExecInitJunkFilterConversion(List *targetList,
 }
 
 /*
+ * ExecFindJunkAttributeInTlist
+ *
+ * Locate the specified junk attribute by its name in a targetlist,
+ * and return its resno. Returns InvalidAttrNumber if not found.
+ *
+ * This code was returned from some previous versions of PostgreSQL to be used
+ * in PargreSQL.
+ */
+AttrNumber
+ExecFindJunkAttributeInTlist(List *targetlist, const char *attrName)
+{
+	ListCell   *t;
+
+	foreach(t, targetlist)
+	{
+		TargetEntry *tle = lfirst(t);
+
+		if (tle->resjunk && tle->resname &&
+			(strcmp(tle->resname, attrName) == 0))
+		{
+			/* We found it ! */
+			return tle->resno;
+		} else {
+			printf("attr '%s' is not '%s'\n", tle->resname, attrName);
+		}
+	}
+
+	return InvalidAttrNumber;
+}
+
+/*
  * ExecFindJunkAttribute
  *
  * Locate the specified junk attribute in the junk filter's targetlist,

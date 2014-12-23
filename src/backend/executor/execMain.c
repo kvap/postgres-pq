@@ -1678,7 +1678,20 @@ lnext:	;
 				break;
 
 			case CMD_UPDATE:
-				ExecUpdate(slot, tupleid, planSlot, dest, estate);
+				printf("got a ctid == '%u'\n", ItemPointerGetBlockNumber(tupleid));
+				if (!ItemPointerIsValid(tupleid)) {
+					printf("INSERT instead of UPDATE\n");
+					ExecInsert(slot, NULL, planSlot, dest, estate);
+				} else if (ItemPointerIsDeleteMe(tupleid)) {
+					printf("DELETE instead of UPDATE\n");
+					ItemPointerUnsetDeleteMe(tupleid);
+					ExecDelete(tupleid, planSlot, dest, estate);
+				} else  {
+					printf("Ctid.blkid is %u, Ctid.offset is %u\n", ItemPointerGetBlockNumber(tupleid), ItemPointerGetOffsetNumber(tupleid));
+					printf("Just an UPDATE\n");
+					ExecUpdate(slot, tupleid, planSlot, dest, estate);
+				}
+				// The original logic was just ExecUpdate(slot, tupleid, planSlot, dest, estate);
 				break;
 
 			default:

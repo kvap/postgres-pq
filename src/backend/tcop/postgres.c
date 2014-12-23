@@ -95,7 +95,9 @@ int			max_stack_depth = 100;
 /* wait N seconds to allow attach from a debugger */
 int			PostAuthDelay = 0;
 
-
+/* GUC parameter for enabling/disabling PargreSQL logic */
+/* defined in planner.c */
+extern bool		enable_pargresql;
 
 /* ----------------
  *		private variables
@@ -3335,6 +3337,10 @@ PostgresMain(int argc, char *argv[], const char *username)
 
 	SetProcessingMode(NormalProcessing);
 
+	if (enable_pargresql) {
+		_pargresql_InitLib();
+	}
+
 	/*
 	 * Now that we know if client is a superuser, we can try to apply SUSET
 	 * GUC options that came from the client.
@@ -3805,6 +3811,10 @@ PostgresMain(int argc, char *argv[], const char *username)
 				 */
 			case 'X':
 			case EOF:
+				// FIXME: see the NOTE below!
+				if (enable_pargresql) {
+					_pargresql_FinalizeLib();
+				}
 
 				/*
 				 * Reset whereToSendOutput to prevent ereport from attempting

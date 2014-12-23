@@ -32,6 +32,7 @@
 #include "optimizer/subselect.h"
 #include "optimizer/tlist.h"
 #include "optimizer/var.h"
+#include "par_parallelizer/par_parallelizer.h"
 #ifdef OPTIMIZER_DEBUG
 #include "nodes/print.h"
 #endif
@@ -44,6 +45,9 @@
 
 /* GUC parameter */
 double		cursor_tuple_fraction = DEFAULT_CURSOR_TUPLE_FRACTION;
+
+/* GUC parameter for enabling/disabling PargreSQL logic */
+bool		enable_pargresql = false;
 
 /* Hook for plugins to get control in planner() */
 planner_hook_type planner_hook = NULL;
@@ -189,6 +193,10 @@ standard_planner(Query *parse, int cursorOptions, ParamListInfo boundParams)
 	/* primary planning entry point (may recurse for subqueries) */
 	top_plan = subquery_planner(glob, parse, NULL,
 								false, tuple_fraction, &root);
+
+	if (enable_pargresql && !(cursorOptions & CURSOR_OPT_DONT_PARALLELIZE)) {
+		top_plan = par_Parallelize(top_plan, parse);
+	}
 
 	/*
 	 * If creating a plan for a scrollable cursor, make sure it can run

@@ -503,7 +503,10 @@ SPI_execute_with_args(const char *src,
 SPIPlanPtr
 SPI_prepare(const char *src, int nargs, Oid *argtypes)
 {
-	return SPI_prepare_cursor(src, nargs, argtypes, 0);
+	// FIXME: PargreSQL: Find a way to determine whether the query is a
+	// trigger and disable parallelization if it is. Or find a way to
+	// parallelize trigger plans...
+	return SPI_prepare_cursor(src, nargs, argtypes, 0 | CURSOR_OPT_DONT_PARALLELIZE);
 }
 
 SPIPlanPtr

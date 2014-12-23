@@ -29,11 +29,13 @@ endif
 # the object files from libpgport, this would not be true on all
 # platforms.
 LIBS := $(LIBS:-lpgport=)
+LIBS += "-lrt"
 
 OBJS=	fe-auth.o fe-connect.o fe-exec.o fe-misc.o fe-print.o fe-lobj.o \
 	fe-protocol2.o fe-protocol3.o pqexpbuffer.o pqsignal.o fe-secure.o \
 	libpq-events.o \
 	md5.o ip.o wchar.o encnames.o noblock.o pgstrcasecmp.o thread.o \
+	par_libpq-fe.o par_config.o \
 	$(filter crypt.o getaddrinfo.o inet_aton.o open.o snprintf.o strerror.o strlcpy.o win32error.o, $(LIBOBJS))
 
 ifeq ($(PORTNAME), cygwin)
@@ -107,6 +109,8 @@ $(top_builddir)/src/port/pg_config_paths.h:
 
 install: all installdirs install-lib
 	$(INSTALL_DATA) $(srcdir)/libpq-fe.h '$(DESTDIR)$(includedir)'
+	$(INSTALL_DATA) $(srcdir)/par_libpq-fe.h '$(DESTDIR)$(includedir)'
+	$(INSTALL_DATA) $(srcdir)/par_Compat.h '$(DESTDIR)$(includedir)'
 	$(INSTALL_DATA) $(srcdir)/libpq-events.h '$(DESTDIR)$(includedir)'
 	$(INSTALL_DATA) $(srcdir)/libpq-int.h '$(DESTDIR)$(includedir_internal)'
 	$(INSTALL_DATA) $(srcdir)/pqexpbuffer.h '$(DESTDIR)$(includedir_internal)'
@@ -117,6 +121,8 @@ installdirs: installdirs-lib
 
 uninstall: uninstall-lib
 	rm -f '$(DESTDIR)$(includedir)/libpq-fe.h'
+	rm -f '$(DESTDIR)$(includedir)/par_libpq-fe.h'
+	rm -f '$(DESTDIR)$(includedir)/par_Compat.h'
 	rm -f '$(DESTDIR)$(includedir)/libpq-events.h'
 	rm -f '$(DESTDIR)$(includedir_internal)/libpq-int.h'
 	rm -f '$(DESTDIR)$(includedir_internal)/pqexpbuffer.h'

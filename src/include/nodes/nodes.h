@@ -73,6 +73,10 @@ typedef enum NodeTag
 	T_Limit,
 	/* this one isn't a subclass of Plan: */
 	T_PlanInvalItem,
+	T_Merge,
+	T_Split,
+	T_Scatter,
+	T_Gather,
 
 	/*
 	 * TAGS FOR PLAN STATE NODES (execnodes.h)
@@ -109,6 +113,10 @@ typedef enum NodeTag
 	T_HashState,
 	T_SetOpState,
 	T_LimitState,
+	T_MergeState,
+	T_SplitState,
+	T_ScatterState,
+	T_GatherState,
 
 	/*
 	 * TAGS FOR PRIMITIVE NODES (primnodes.h)

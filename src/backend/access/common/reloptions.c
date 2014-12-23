@@ -185,6 +185,13 @@ static relopt_real realRelOpts[] =
 
 static relopt_string stringRelOpts[] =
 {
+	{
+		/*gen*/{
+			"fragattr",
+			"The name of the attribute used for fragmentation",
+			RELOPT_KIND_HEAP | RELOPT_KIND_TOAST
+		}, /*def.len*/4, /*def.isnull*/FALSE, /*validator*/NULL, "NULL"
+	},
 	/* list terminator */
 	{{NULL}}
 };
@@ -975,8 +982,9 @@ allocateReloptStruct(Size base, relopt_value *options, int numoptions)
 	int			i;
 
 	for (i = 0; i < numoptions; i++)
-		if (options[i].gen->type == RELOPT_TYPE_STRING)
+		if (options[i].gen->type == RELOPT_TYPE_STRING) {
 			size += GET_STRING_RELOPTION_LEN(options[i]) + 1;
+		}
 
 	return palloc0(size);
 }
@@ -1097,7 +1105,8 @@ default_reloptions(Datum reloptions, bool validate, relopt_kind kind)
 		{"autovacuum_vacuum_scale_factor", RELOPT_TYPE_REAL,
 		offsetof(StdRdOptions, autovacuum) +offsetof(AutoVacOpts, vacuum_scale_factor)},
 		{"autovacuum_analyze_scale_factor", RELOPT_TYPE_REAL,
-		offsetof(StdRdOptions, autovacuum) +offsetof(AutoVacOpts, analyze_scale_factor)}
+		offsetof(StdRdOptions, autovacuum) +offsetof(AutoVacOpts, analyze_scale_factor)},
+		{"fragattr", RELOPT_TYPE_STRING, offsetof(StdRdOptions, fragattr)}
 	};
 
 	options = parseRelOptions(reloptions, validate, kind, &numoptions);

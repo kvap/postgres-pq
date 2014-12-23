@@ -32,7 +32,9 @@ typedef uint32 BlockNumber;
 
 #define InvalidBlockNumber		((BlockNumber) 0xFFFFFFFF)
 
-#define MaxBlockNumber			((BlockNumber) 0xFFFFFFFE)
+// Old one: #define MaxBlockNumber			((BlockNumber) 0xFFFFFFFE)
+#define MaxBlockNumber			((BlockNumber) 0x7FFFFFFF)
+#define MaskBlockNumber			((BlockNumber) 0x80000000)
 
 /*
  * BlockId:
@@ -69,6 +71,25 @@ typedef BlockIdData *BlockId;	/* block identifier */
  */
 #define BlockNumberIsValid(blockNumber) \
 	((bool) ((BlockNumber) (blockNumber) != InvalidBlockNumber))
+
+/*
+ * BlockNumberIsDeleteMe
+ *		True if blockNumber means 'delete this tuple'.
+ */
+#define BlockNumberIsDeleteMe(blockNumber) \
+	((bool) ((((BlockNumber) (blockNumber)) & MaskBlockNumber) != 0))
+/*
+ * BlockNumberSetDeleteMe
+ *		Set the 'delete this tuple' flag.
+ */
+#define BlockNumberSetDeleteMe(blockNumber) \
+	(((BlockNumber) (blockNumber)) | MaskBlockNumber)
+/*
+ * BlockNumberUnsetDeleteMe
+ *		Unset the 'delete this tuple' flag.
+ */
+#define BlockNumberUnsetDeleteMe(blockNumber) \
+	(((BlockNumber) (blockNumber)) & ~MaskBlockNumber)
 
 /*
  * BlockIdIsValid

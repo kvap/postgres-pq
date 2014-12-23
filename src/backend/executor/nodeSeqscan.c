@@ -171,6 +171,7 @@ SeqScanState *
 ExecInitSeqScan(SeqScan *node, EState *estate, int eflags)
 {
 	SeqScanState *scanstate;
+	AttrNumber ctid_attrno;
 
 	/*
 	 * Once upon a time it was possible to have an outerPlan of a SeqScan, but

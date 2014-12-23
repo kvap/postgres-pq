@@ -2683,8 +2683,11 @@ exec_prepare_plan(PLpgSQL_execstate *estate,
 	/*
 	 * Generate and save the plan
 	 */
+// PargreSQL modification "don't parallelize the stored procedures".
+//	plan = SPI_prepare_cursor(expr->query, expr->nparams, argtypes,
+//							  cursorOptions);
 	plan = SPI_prepare_cursor(expr->query, expr->nparams, argtypes,
-							  cursorOptions);
+							  cursorOptions | CURSOR_OPT_DONT_PARALLELIZE);
 	if (plan == NULL)
 	{
 		/* Some SPI errors deserve specific error messages */

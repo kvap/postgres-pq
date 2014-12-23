@@ -337,6 +337,12 @@ static const struct config_enum_entry constraint_exclusion_options[] = {
 extern const struct config_enum_entry sync_method_options[];
 
 /*
+ * GUC option for enabling/disabling PargreSQL logic.
+ * Defined in planner.c
+ */
+extern bool enable_pargresql;
+
+/*
  * GUC option variables that are exported from this module
  */
 #ifdef USE_ASSERT_CHECKING
@@ -584,6 +590,14 @@ const char *const config_type_names[] =
 
 static struct config_bool ConfigureNamesBool[] =
 {
+	{
+		{"enable_pargresql", PGC_USERSET, UNGROUPED,
+			gettext_noop("Enables the parallel query processing."),
+			NULL
+		},
+		&enable_pargresql,
+		false, NULL, NULL
+	},
 	{
 		{"enable_seqscan", PGC_USERSET, QUERY_TUNING_METHOD,
 			gettext_noop("Enables the planner's use of sequential-scan plans."),

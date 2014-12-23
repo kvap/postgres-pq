@@ -82,7 +82,6 @@ typedef struct PlannedStmt
 #define exec_subplan_get_plan(plannedstmt, subplan) \
 	((Plan *) list_nth((plannedstmt)->subplans, (subplan)->plan_id - 1))
 
-
 /* ----------------
  *		Plan node
  *
@@ -134,6 +133,8 @@ typedef struct Plan
 	 */
 	Bitmapset  *extParam;
 	Bitmapset  *allParam;
+
+	int fragattr;
 } Plan;
 
 /* ----------------
@@ -646,5 +647,7 @@ typedef struct PlanInvalItem
 	int			cacheId;		/* a syscache ID, see utils/syscache.h */
 	ItemPointerData tupleId;	/* TID of the object's catalog tuple */
 } PlanInvalItem;
+
+#include "nodes/par_plannodes.h"
 
 #endif   /* PLANNODES_H */

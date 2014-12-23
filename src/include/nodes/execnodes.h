@@ -25,6 +25,8 @@
 #include "utils/snapshot.h"
 #include "utils/tuplestore.h"
 
+#include "par_inis/_pargresql_library.h"
+
 
 /* ----------------
  *	  IndexInfo information
@@ -1665,5 +1667,7 @@ typedef struct LimitState
 	int64		position;		/* 1-based index of last tuple returned */
 	TupleTableSlot *subSlot;	/* tuple last obtained from subplan */
 } LimitState;
+
+#include "nodes/par_execnodes.h"
 
 #endif   /* EXECNODES_H */

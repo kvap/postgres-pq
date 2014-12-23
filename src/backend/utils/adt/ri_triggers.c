@@ -3228,6 +3228,7 @@ ri_PlanCheck(const char *querystr, int nargs, Oid *argtypes,
 						   save_sec_context | SECURITY_LOCAL_USERID_CHANGE);
 
 	/* Create the plan */
+	printf("SPI_prepare('%s', ...)\n", querystr);
 	qplan = SPI_prepare(querystr, nargs, argtypes);
 
 	if (qplan == NULL)

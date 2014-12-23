@@ -499,6 +499,13 @@ set_plan_refs(PlannerGlobal *glob, Plan *plan, int rtoffset)
 				}
 			}
 			break;
+		case T_Split:
+		case T_Merge:
+		case T_Scatter:
+		case T_Gather:
+			set_dummy_tlist_references(plan, rtoffset);
+			Assert(plan->qual == NIL);
+			break;
 		default:
 			elog(ERROR, "unrecognized node type: %d",
 				 (int) nodeTag(plan));

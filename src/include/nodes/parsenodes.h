@@ -1800,6 +1800,7 @@ typedef struct CommentStmt
 #define CURSOR_OPT_INSENSITIVE	0x0008	/* INSENSITIVE */
 #define CURSOR_OPT_HOLD			0x0010	/* WITH HOLD */
 #define CURSOR_OPT_FAST_PLAN	0x0020	/* prefer fast-start plan */
+#define CURSOR_OPT_DONT_PARALLELIZE  0x8000  /* don't parallelize the plan */
 
 typedef struct DeclareCursorStmt
 {

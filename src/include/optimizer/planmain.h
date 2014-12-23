@@ -119,4 +119,6 @@ extern void extract_query_dependencies(List *queries,
 						   List **relationOids,
 						   List **invalItems);
 
+#include "optimizer/par_planmain.h"
+
 #endif   /* PLANMAIN_H */
